@@ -1,7 +1,24 @@
 import GUNS from '../data/guns.js'
 import GunCard from '../components/GunCard.jsx'
 
-function Catalog() {
+function Catalog({ searchQuery = '', selectedType = 'All' }) {
+    const query = searchQuery.trim().toLowerCase()
+
+    const filteredGuns = GUNS.filter((gun) => {
+        const matchesType =
+            selectedType === 'All' ||
+            gun.type.toLowerCase() === selectedType.toLowerCase()
+
+        const matchesSearch =
+            !query ||
+            gun.name.toLowerCase().includes(query) ||
+            gun.caliber.toLowerCase().includes(query) ||
+            gun.type.toLowerCase().includes(query) ||
+            (gun.description && gun.description.toLowerCase().includes(query))
+
+        return matchesType && matchesSearch
+    })
+
     return (
         <>
             <section className="masthead">
@@ -15,11 +32,24 @@ function Catalog() {
             <section>
                 <div className="list-head">
                     <h2>Current stock</h2>
-                    <span className="count">{GUNS.length} pieces</span>
+                    <span className="count">{filteredGuns.length} pieces</span>
                 </div>
-                <ul className="stock">
-                    {GUNS.map((gun) => <GunCard key={gun.name} gun={gun} />)}
-                </ul>
+                {filteredGuns.length > 0 ? (
+                    <ul className="stock">
+                        {filteredGuns.map((gun) => (
+                            <GunCard key={gun.name} gun={gun} />
+                        ))}
+                    </ul>
+                ) : (
+                    <div className="no-match">
+                        <p className="no-match-title">No guns match</p>
+                        <p className="no-match-sub">
+                            {query
+                                ? `No results found for "${searchQuery}" in ${selectedType === 'All' ? 'all categories' : selectedType}.`
+                                : `No guns available in ${selectedType} category.`}
+                        </p>
+                    </div>
+                )}
             </section>
         </>
     )

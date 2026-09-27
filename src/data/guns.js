@@ -53,6 +53,33 @@ const GUNS = [
         description:
             'The other pump gun. Twin action bars, a simple safety on the tang, and a price that leaves money for ammunition.',
     },
+    {
+        name: 'Revolver',
+        type: 'Pistol',
+        caliber: '.38',
+        price: 399,
+        image: '/guns/Revolver.jpg',
+        description:
+            'Pistol jenis Revolver',
+    },
+    {
+        name: 'Scar L',
+        type: 'Rifle',
+        caliber: '5.56mm',
+        price: 1599,
+        image: '/guns/Scar-L.webp',
+        description:
+            'Rifle buatan Belgia.',
+    },
+    {
+        name: 'Pindad SG1',
+        type: 'Shotgun',
+        caliber: '12 Gauge',
+        price: 399,
+        image: '/guns/Pindad_SG-1_12_Gauge.jpg',
+        description:
+            'Shotgun buatan Indonesia.',
+    },
 ]
 
 export default GUNS
