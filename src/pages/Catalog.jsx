@@ -1,7 +1,12 @@
 import GUNS from '../data/guns.js'
 import GunCard from '../components/GunCard.jsx'
 
-function Catalog({ searchQuery = '', selectedType = 'All' }) {
+function Catalog({
+    searchQuery = '',
+    selectedType = 'All',
+    sortBy = 'default',
+    onAddToCart,
+}) {
     const query = searchQuery.trim().toLowerCase()
 
     const filteredGuns = GUNS.filter((gun) => {
@@ -19,6 +24,22 @@ function Catalog({ searchQuery = '', selectedType = 'All' }) {
         return matchesType && matchesSearch
     })
 
+    const displayedGuns = [...filteredGuns].sort((a, b) => {
+        if (sortBy === 'name-asc') {
+            return a.name.localeCompare(b.name)
+        }
+        if (sortBy === 'name-desc') {
+            return b.name.localeCompare(a.name)
+        }
+        if (sortBy === 'price-asc') {
+            return (a.price - b.price) || a.name.localeCompare(b.name)
+        }
+        if (sortBy === 'price-desc') {
+            return (b.price - a.price) || a.name.localeCompare(b.name)
+        }
+        return 0
+    })
+
     return (
         <>
             <section className="masthead">
@@ -32,12 +53,16 @@ function Catalog({ searchQuery = '', selectedType = 'All' }) {
             <section>
                 <div className="list-head">
                     <h2>Current stock</h2>
-                    <span className="count">{filteredGuns.length} pieces</span>
+                    <span className="count">{displayedGuns.length} pieces</span>
                 </div>
-                {filteredGuns.length > 0 ? (
+                {displayedGuns.length > 0 ? (
                     <ul className="stock">
-                        {filteredGuns.map((gun) => (
-                            <GunCard key={gun.name} gun={gun} />
+                        {displayedGuns.map((gun) => (
+                            <GunCard
+                                key={gun.name}
+                                gun={gun}
+                                onAddToCart={onAddToCart}
+                            />
                         ))}
                     </ul>
                 ) : (
